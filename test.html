@@ -4,85 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>러브버그 클린업 테스트</title>
-    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <section class="game-card" aria-label="러브버그 클린업 테스트">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">TEST MODE</p>
-            <h1>레벨 테스트</h1>
-          </div>
-          <button id="soundToggle" class="icon-btn" type="button" aria-label="효과음 켜기">
-            <span id="soundIcon">♪</span>
-          </button>
-        </header>
-
-        <section id="testPanel" class="test-panel">
-          <label>
-            <span>레벨 선택</span>
-            <input id="levelSlider" type="range" min="1" max="100" value="1" />
-          </label>
-          <div class="test-actions">
-            <button id="coinGrantButton" type="button">코인 +1000</button>
-            <button id="venueRollButton" type="button">장소 랜덤</button>
-          </div>
-          <select id="venueSelect" aria-label="장소 선택"></select>
-          <div id="toolList" class="tool-list"></div>
-        </section>
-
-        <section class="hud-grid" aria-label="게임 상태">
-          <div class="hud-item"><span>Lv</span><strong id="levelText">1</strong></div>
-          <div class="hud-item"><span>도구</span><strong id="toolText">손</strong></div>
-          <div class="hud-item"><span>점수</span><strong id="scoreText">0</strong></div>
-          <div class="hud-item"><span>콤보</span><strong id="comboText">0</strong></div>
-          <div class="hud-item"><span>장소</span><strong id="venueText">공원길</strong></div>
-          <div class="hud-item"><span>범위</span><strong id="rangeText">32</strong></div>
-        </section>
-
-        <section class="stage-wrap">
-          <canvas id="gameCanvas" width="720" height="960" aria-label="러브버그 게임 화면"></canvas>
-          <div id="startPanel" class="overlay-panel">
-            <div class="pixel-badge">테스트 모드</div>
-            <h2>레벨과 장소를 바꿔가며 도구를 확인하세요</h2>
-            <p>슬라이더로 레벨을 바꾸면 도구, 타격 범위, 스킬 잠금 상태가 즉시 바뀝니다.</p>
-            <button id="startButton" class="primary-btn" type="button">테스트 시작</button>
-          </div>
-          <div id="resultPanel" class="overlay-panel hidden">
-            <div class="pixel-badge">결과</div>
-            <h2 id="resultTitle">클린업 완료</h2>
-            <p id="resultSummary"></p>
-            <button id="restartButton" class="primary-btn" type="button">다시 하기</button>
-          </div>
-        </section>
-
-        <section class="bottom-panel">
-          <div>
-            <div class="meter-label">
-              <span>다음 레벨</span>
-              <strong id="expText">0 / 80</strong>
-            </div>
-            <div class="meter"><span id="expBar"></span></div>
-          </div>
-          <div class="tool-row">
-            <button id="skillButton" class="skill-btn" type="button" disabled>
-              <span id="skillName">스킬 대기</span>
-              <strong id="skillCharge">잠김</strong>
-            </button>
-            <div class="coin-pill">코인 <strong id="coinText">0</strong></div>
-          </div>
-          <section class="shop-panel" aria-label="스킬 상점">
-            <div class="shop-title">
-              <span>스킬 상점</span>
-              <strong>테스트 구매/장착</strong>
-            </div>
-            <div id="skillShop" class="shop-grid"></div>
-          </section>
-        </section>
-      </section>
-    </main>
-
-    <script src="main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
