@@ -245,6 +245,45 @@ const purchasableSkills = [
   },
 ];
 
+const shopUpgrades = [
+  {
+    id: "toolTraining",
+    name: "도구 숙련",
+    maxLevel: 8,
+    baseCost: 90,
+    costStep: 55,
+    desc: "모든 도구의 타격 범위와 기본 점수 보너스가 증가합니다.",
+    effectLabel: (level) => `범위 +${level * 4}`,
+  },
+  {
+    id: "comboDrive",
+    name: "콤보 드라이브",
+    maxLevel: 6,
+    baseCost: 120,
+    costStep: 85,
+    desc: "콤보 점수 배율이 더 빠르게 올라갑니다.",
+    effectLabel: (level) => `콤보 효율 +${level * 6}%`,
+  },
+  {
+    id: "coinMagnet",
+    name: "코인 자석",
+    maxLevel: 7,
+    baseCost: 140,
+    costStep: 95,
+    desc: "플레이 중 획득 코인과 결과 보너스 코인이 증가합니다.",
+    effectLabel: (level) => `코인 +${level * 8}%`,
+  },
+  {
+    id: "skillBattery",
+    name: "스킬 배터리",
+    maxLevel: 5,
+    baseCost: 180,
+    costStep: 130,
+    desc: "장착 스킬의 재사용 대기시간이 감소합니다.",
+    effectLabel: (level) => `쿨다운 -${level * 5}%`,
+  },
+];
+
 const heroes = [
   {
     id: "gil_dong",
@@ -289,6 +328,7 @@ const state = {
   skillCooldown: 8,
   unlockedSkills: [],
   equippedSkillId: null,
+  upgrades: {},
   coinFever: 0,
   sound: false,
   lastTime: 0,
@@ -309,7 +349,7 @@ function requiredExp(level) {
 
 function getAttackRadius() {
   const tool = getTool();
-  return Math.round(tool.radius + Math.min(32, state.level * 0.45));
+  return Math.round(tool.radius + Math.min(32, state.level * 0.45) + getUpgradeLevel("toolTraining") * 4);
 }
 
 function getTool() {
@@ -343,6 +383,24 @@ function getHero() {
   return heroes.find((hero) => hero.id === state.heroId) || heroes[0];
 }
 
+function getUpgradeLevel(id) {
+  return Number(state.upgrades?.[id] || 0);
+}
+
+function getUpgradeCost(upgrade) {
+  const level = getUpgradeLevel(upgrade.id);
+  return Math.floor(upgrade.baseCost + upgrade.costStep * level + Math.pow(level, 1.55) * 38);
+}
+
+function getCoinMultiplier() {
+  return 1 + getUpgradeLevel("coinMagnet") * 0.08;
+}
+
+function getSkillCooldown(skill) {
+  const base = skill?.cooldown || state.skillCooldown;
+  return Math.max(3.5, base * (1 - getUpgradeLevel("skillBattery") * 0.05));
+}
+
 function load() {
   try {
     const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
@@ -352,6 +410,7 @@ function load() {
     state.coins = saved.coins || 0;
     state.unlockedSkills = saved.unlockedSkills || [];
     state.equippedSkillId = saved.equippedSkillId || null;
+    state.upgrades = saved.upgrades || {};
     if (saved.venueId && venues.some((venue) => venue.id === saved.venueId)) state.venueId = saved.venueId;
     if (saved.heroId && heroes.some((hero) => hero.id === saved.heroId)) state.heroId = saved.heroId;
   } catch {
@@ -368,6 +427,7 @@ function save() {
       coins: state.coins,
       unlockedSkills: state.unlockedSkills,
       equippedSkillId: state.equippedSkillId,
+      upgrades: state.upgrades,
       venueId: state.venueId,
       heroId: state.heroId,
     })
@@ -1141,11 +1201,11 @@ function catchAt(x, y, fromSkill = false) {
     if (circleHit) {
       caught += 1;
       state.catches += bug.type === "lovebugPair" || bug.type === "goldPair" ? 2 : 1;
-      const comboBonus = 1 + Math.min(state.combo, 80) * 0.025;
-      const levelBonus = 1 + state.level * 0.035;
+      const comboBonus = 1 + Math.min(state.combo, 80) * (0.025 + getUpgradeLevel("comboDrive") * 0.0015);
+      const levelBonus = 1 + state.level * 0.035 + getUpgradeLevel("toolTraining") * 0.025;
       state.score += Math.floor(bug.value * comboBonus * levelBonus);
       state.exp += bug.exp;
-      state.coins += (bug.type === "goldPair" ? 6 : 1) * (state.coinFever > 0 ? 3 : 1);
+      state.coins += Math.max(1, Math.floor((bug.type === "goldPair" ? 6 : 1) * (state.coinFever > 0 ? 3 : 1) * getCoinMultiplier()));
       drawSplat(bug.x, bug.y, bug.type === "lovebugPair" || bug.type === "goldPair" ? 1.4 : 1);
       addToolImpact(tool, bug.x, bug.y, bug.type === "goldPair");
     } else {
@@ -1185,13 +1245,13 @@ function useSkill() {
   if (!state.running || state.skillReady > 0 || state.level < 10) return;
   const purchasedSkill = getEquippedSkill();
   if (purchasedSkill && state.unlockedSkills.includes(purchasedSkill.id)) {
-    state.skillReady = purchasedSkill.cooldown;
+    state.skillReady = getSkillCooldown(purchasedSkill);
     usePurchasedSkill(purchasedSkill);
     return;
   }
 
   const tool = getTool();
-  state.skillReady = state.skillCooldown;
+  state.skillReady = getSkillCooldown();
 
   if (state.level >= 100) {
     for (const bug of [...state.bugs]) catchAt(bug.x, bug.y, true);
@@ -1396,6 +1456,19 @@ function getUiSnapshot() {
     tools,
     venues,
     heroes,
+    upgrades: shopUpgrades.map((upgrade) => {
+      const level = getUpgradeLevel(upgrade.id);
+      const maxed = level >= upgrade.maxLevel;
+      const cost = maxed ? 0 : getUpgradeCost(upgrade);
+      return {
+        ...upgrade,
+        level,
+        cost,
+        maxed,
+        afford: state.coins >= cost,
+        nextEffect: upgrade.effectLabel(Math.min(upgrade.maxLevel, level + 1)),
+      };
+    }),
     selectedVenueId: state.venueId,
     selectedHeroId: state.heroId,
     currentToolId: tool.id,
@@ -1437,7 +1510,6 @@ function updateUi() {
 
 function startRound() {
   state.running = true;
-  if (!isTestMode) state.venueId = venues[Math.floor(Math.random() * venues.length)].id;
   state.time = ROUND_TIME;
   state.score = 0;
   state.combo = 0;
@@ -1474,6 +1546,20 @@ function buyOrEquipSkill(skillId) {
   updateUi();
 }
 
+function buyUpgrade(upgradeId) {
+  const upgrade = shopUpgrades.find((item) => item.id === upgradeId);
+  if (!upgrade) return;
+  const level = getUpgradeLevel(upgrade.id);
+  if (level >= upgrade.maxLevel) return;
+  const cost = getUpgradeCost(upgrade);
+  if (state.coins < cost) return;
+  state.coins -= cost;
+  state.upgrades = { ...state.upgrades, [upgrade.id]: level + 1 };
+  addEffect("text", W / 2, 120, "#ffd166", "UPGRADE");
+  save();
+  updateUi();
+}
+
 function renderShop() {
   if (ui.dockTabs?.length) {
     ui.dockTabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === state.shopTab || (!tab.dataset.tab && tab.textContent.trim() === tabName(state.shopTab))));
@@ -1482,7 +1568,7 @@ function renderShop() {
 }
 
 function tabName(tab) {
-  return { skill: "스킬", tool: "도구", companion: "동료", pet: "동료", place: "장소" }[tab] || "스킬";
+  return { skill: "스킬", tool: "강화", companion: "동료", pet: "동료", place: "장소" }[tab] || "강화";
 }
 
 function renderTestPanel() {
@@ -1504,7 +1590,7 @@ function renderTestPanel() {
 
 function endRound() {
   state.running = false;
-  const earnedCoins = Math.floor(state.score / 650);
+  const earnedCoins = Math.floor((state.score / 650) * getCoinMultiplier());
   const earnedExp = Math.floor(state.catches * 0.6 + state.bestCombo * 0.8);
   state.coins += earnedCoins;
   state.exp += earnedExp;
@@ -1552,6 +1638,11 @@ if (ui.skillShop) {
       buyOrEquipSkill(button.dataset.skill);
       return;
     }
+    const upgrade = event.target.closest("[data-upgrade]");
+    if (upgrade) {
+      buyUpgrade(upgrade.dataset.upgrade);
+      return;
+    }
     const placeholder = event.target.closest("[data-placeholder]");
     if (!placeholder) return;
     if (state.shopTab === "place") {
@@ -1570,7 +1661,7 @@ if (ui.dockTabs?.length) {
   ui.dockTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       const label = tab.textContent.trim();
-      state.shopTab = { "스킬": "skill", "도구": "tool", "동료": "companion", "펫": "companion", "장소": "place" }[label] || "skill";
+      state.shopTab = { "스킬": "skill", "도구": "tool", "강화": "tool", "동료": "companion", "펫": "companion", "장소": "place" }[label] || "tool";
       renderShop();
     });
   });
@@ -1620,6 +1711,7 @@ if (ui.venueSelect) {
 ui.startButton.addEventListener("click", startRound);
 ui.restartButton.addEventListener("click", startRound);
 ui.skillButton.addEventListener("click", useSkill);
+window.addEventListener("lovebug:start-run", startRound);
 ui.soundToggle.addEventListener("click", () => {
   state.sound = !state.sound;
   ui.soundIcon.textContent = state.sound ? "♫" : "♪";

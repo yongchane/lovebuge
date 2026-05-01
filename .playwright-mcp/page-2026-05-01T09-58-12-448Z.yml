@@ -1,0 +1,50 @@
+- main [ref=e3]:
+  - region "러브버그 클린업 게임" [ref=e4]:
+    - generic:
+      - button "✦ 0" [ref=e5]:
+        - generic [ref=e6]: ✦
+        - strong [ref=e7]: "0"
+      - generic "보유 재화" [ref=e8]:
+        - generic [ref=e10]: "72"
+        - button "상점 열기" [ref=e11]: +
+        - generic [ref=e12]: Battle 1
+        - button "효과음 켜기" [ref=e13]: Ⅱ
+    - generic:
+      - generic:
+        - region "메인 화면":
+          - button "▶▶ 24:58" [ref=e19]:
+            - generic [ref=e20]: ▶▶
+            - strong [ref=e21]: 24:58
+          - button "✦ Collect Gold 0" [ref=e22]:
+            - text: ✦
+            - generic [ref=e23]: Collect Gold
+            - strong [ref=e24]: "0"
+          - region "현재 전투 상태":
+            - generic:
+              - strong: "400"
+            - generic:
+              - strong: "400"
+          - region "빠른 편성" [ref=e25]:
+            - button "리더 홍길동" [ref=e26]:
+              - generic [ref=e28]: 리더
+              - strong [ref=e29]: 홍길동
+            - button "손 타격 32" [ref=e30]:
+              - strong [ref=e32]: 손
+              - generic [ref=e33]: 타격 32
+            - button "스킬 대기 잠김" [ref=e34]:
+              - strong [ref=e36]: 스킬 대기
+              - generic [ref=e37]: 잠김
+            - button "공원길 현장" [ref=e38]:
+              - strong [ref=e39]: 공원길
+              - generic [ref=e40]: 현장
+    - navigation "하단 메뉴" [ref=e41]:
+      - button "로비" [ref=e42]:
+        - strong [ref=e44]: 로비
+      - button "장비" [ref=e45]:
+        - strong [ref=e47]: 장비
+      - button "동료" [ref=e48]:
+        - strong [ref=e50]: 동료
+      - button "지도" [ref=e51]:
+        - strong [ref=e53]: 지도
+      - button "상점" [ref=e54]:
+        - strong [ref=e56]: 상점

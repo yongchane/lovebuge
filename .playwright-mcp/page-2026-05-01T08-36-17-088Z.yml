@@ -1,0 +1,59 @@
+- main [ref=e3]:
+  - region "러브버그 클린업 게임" [ref=e4]:
+    - generic [ref=e5]:
+      - button "♥ 방역ON LOVEBUG" [ref=e6]:
+        - generic [ref=e7]: ♥
+        - generic [ref=e8]:
+          - generic [ref=e9]: 방역ON
+          - strong [ref=e10]: LOVEBUG
+      - generic "보유 재화" [ref=e11]:
+        - generic [ref=e13]: "0"
+        - generic [ref=e15]: 스프레이
+        - button "효과음 켜기" [ref=e16]: ♪
+    - region "메인 화면" [ref=e19]:
+      - generic [ref=e21]:
+        - text: "!"
+        - generic [ref=e22]: 민원폭주! 하천변 러브버그 출몰주의
+      - generic "이벤트" [ref=e23]:
+        - button "긴급보급 코인 부스트" [ref=e24]:
+          - generic [ref=e25]: 긴급보급
+          - generic [ref=e26]: 코인 부스트
+        - button "월간방역 도구 숙련 보상" [ref=e27]:
+          - generic [ref=e28]: 월간방역
+          - generic [ref=e29]: 도구 숙련 보상
+        - button "출몰주의 오늘의 현장" [ref=e30]:
+          - generic [ref=e31]: 출몰주의
+          - generic [ref=e32]: 오늘의 현장
+      - generic:
+        - generic:
+          - generic: 클린업 등급
+          - strong: Lv.1 손
+      - generic "로비 메뉴" [ref=e33]:
+        - button "현장" [ref=e34]:
+          - generic [ref=e35]: 현장
+        - button "보급" [ref=e36]:
+          - generic [ref=e37]: 보급
+        - button "동료" [ref=e38]:
+          - generic [ref=e39]: 동료
+        - button "기록" [ref=e40]:
+          - generic [ref=e41]: 기록
+      - generic [ref=e42]:
+        - button "출몰지도" [ref=e43]:
+          - generic [ref=e44]: 출몰지도
+        - button "HOT ZONE 클린업 준비 북한산 은평 숲길" [ref=e45]:
+          - generic [ref=e46]: HOT ZONE
+          - strong [ref=e47]: 클린업 준비
+          - generic [ref=e48]: 북한산 은평 숲길
+        - button "장비실" [ref=e49]:
+          - generic [ref=e50]: 장비실
+    - navigation "하단 메뉴" [ref=e51]:
+      - button "로비" [active] [ref=e52]:
+        - strong [ref=e54]: 로비
+      - button "장비" [ref=e55]:
+        - strong [ref=e57]: 장비
+      - button "동료" [ref=e58]:
+        - strong [ref=e60]: 동료
+      - button "지도" [ref=e61]:
+        - strong [ref=e63]: 지도
+      - button "상점" [ref=e64]:
+        - strong [ref=e66]: 상점

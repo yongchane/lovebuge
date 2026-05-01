@@ -1,0 +1,79 @@
+- main [ref=e3] [box=0,0,1200,942]:
+  - region "러브버그 클린업 테스트" [ref=e4] [box=110,8,980,926]:
+    - generic [ref=e5] [box=114,12,972,67]:
+      - button "♥ TEST 레벨 테스트" [ref=e6] [box=122,20,760,49]:
+        - generic [ref=e7] [box=129,27,34,34]: ♥
+        - generic [ref=e8] [box=175,29,693,30]:
+          - generic [ref=e9] [box=175,29,693,12]: TEST
+          - strong [ref=e10] [box=175,41,693,18]: 레벨 테스트
+      - generic "보유 재화" [ref=e11] [box=888,24,190,42]:
+        - generic [ref=e13] [box=920,35,10,19]: "0"
+        - generic [ref=e15] [box=972,35,55,20]: 스프레이
+        - button "효과음 켜기" [ref=e16] [box=1042,30,30,30]: ♪
+    - generic [ref=e17] [box=122,79,956,18]:
+      - generic [ref=e18] [box=131,88,938,63]:
+        - generic [ref=e19] [box=131,88,938,20]: 레벨 선택
+        - slider "레벨 선택" [ref=e20] [box=133,115,938,34]: "1"
+      - generic [ref=e21] [box=131,159,938,42]:
+        - button "코인 +1000" [ref=e22] [box=131,159,466,42]
+        - button "장소 랜덤" [ref=e23] [box=604,159,466,42]
+      - combobox "장소 선택" [ref=e24] [box=131,209,938,34]:
+        - option "북한산 은평 숲길" [selected] [box=0,0,0,0]
+        - option "은평 아파트 화단" [box=0,0,0,0]
+        - option "고양 숲세권 산책로" [box=0,0,0,0]
+        - option "계양산 밈 산책로" [box=0,0,0,0]
+        - option "한강공원 물가길" [box=0,0,0,0]
+        - option "마포 버스정류장" [box=0,0,0,0]
+        - option "지하철 출구 광장" [box=0,0,0,0]
+        - option "도심 하천 산책길" [box=0,0,0,0]
+        - option "흰차 주차장" [box=0,0,0,0]
+        - option "아파트 방충망 벽" [box=0,0,0,0]
+      - generic [ref=e25] [box=131,251,938,2]:
+        - generic [ref=e26] [box=131,251,76,14]: Lv.1 손 R32
+        - generic [ref=e27] [box=213,251,85,14]: Lv.5 장갑 R42
+        - generic [ref=e28] [box=304,251,123,14]: Lv.10 나무 막대기 R48
+        - generic [ref=e29] [box=433,251,101,14]: Lv.20 신문지 R58
+        - generic [ref=e30] [box=540,251,101,14]: Lv.30 파리채 R72
+        - generic [ref=e31] [box=648,251,123,14]: Lv.40 끈끈이 패들 R82
+        - generic [ref=e32] [box=777,251,111,14]: Lv.50 스프레이 R92
+        - generic [ref=e33] [box=894,251,130,14]: Lv.60 전기 파리채 R100
+        - generic [ref=e34] [box=1029,251,108,14]: Lv.70 선풍기 R108
+        - generic [ref=e35] [box=1143,251,120,14]: Lv.80 미니 터렛 R112
+        - generic [ref=e36] [box=1269,251,120,14]: Lv.90 클린 드론 R118
+        - generic [ref=e37] [box=1396,251,131,14]: Lv.100 가디언 EX R128
+    - generic [ref=e38] [box=114,79,972,851]:
+      - text: "!"
+      - region "플레이 화면" [ref=e40] [box=114,79,972,851]:
+        - region "게임 상태" [ref=e41] [box=122,79,956,102]:
+          - generic [ref=e42] [box=122,79,315,49]:
+            - generic [ref=e43] [box=131,87,297,13]: Lv
+            - strong [ref=e44] [box=131,100,297,17]: "1"
+          - generic [ref=e45] [box=442,79,315,49]:
+            - generic [ref=e46] [box=451,87,297,14]: 도구
+            - strong [ref=e47] [box=451,101,297,19]: 손
+          - generic [ref=e48] [box=763,79,315,49]:
+            - generic [ref=e49] [box=772,87,297,14]: 점수
+            - strong [ref=e50] [box=772,101,297,17]: "0"
+          - generic [ref=e51] [box=122,133,315,49]:
+            - generic [ref=e52] [box=131,141,297,14]: 콤보
+            - strong [ref=e53] [box=131,155,297,17]: "0"
+          - generic [ref=e54] [box=442,133,315,49]:
+            - generic [ref=e55] [box=451,141,297,14]: 장소
+            - strong [ref=e56] [box=451,155,297,19]: 북한산 은평 숲길
+          - generic [ref=e57] [box=763,133,315,49]:
+            - generic [ref=e58] [box=772,141,297,14]: 범위
+            - strong [ref=e59] [box=772,155,297,17]: "32"
+        - generic [ref=e60] [box=122,188,956,653]:
+          - generic "러브버그 게임 화면" [ref=e61] [box=126,192,948,645]
+          - generic [ref=e62] [box=140,602,920,221]:
+            - generic [ref=e63] [box=162,624,88,28]: TEST ZONE
+            - heading "도구 테스트" [level=2] [ref=e64] [box=162,664,876,27]
+            - paragraph [ref=e65] [box=162,703,876,20]: 레벨을 바꾸며 타격 범위와 스킬 상태를 확인하세요.
+            - button "테스트 시작" [ref=e66] [box=174,735,852,54]
+        - generic [ref=e67] [box=122,848,956,74]:
+          - generic [ref=e69] [box=132,858,636,14]:
+            - generic [ref=e70] [box=132,858,41,14]: 다음 레벨
+            - strong [ref=e71] [box=730,858,38,14]: 0 / 143
+          - button "스킬 대기 Lv.10" [disabled] [ref=e73] [box=776,858,292,54]:
+            - generic [ref=e74] [box=790,875,59,20]: 스킬 대기
+            - strong [ref=e75] [box=1013,876,41,19]: Lv.10

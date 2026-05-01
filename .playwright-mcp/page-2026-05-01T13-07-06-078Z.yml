@@ -1,0 +1,51 @@
+- main [ref=e3]:
+  - region "러브버그 클린업 게임" [ref=e4]:
+    - generic:
+      - button "LB 방역본부 LOVEBUG" [ref=e5]:
+        - generic [ref=e6]: LB
+        - generic [ref=e7]:
+          - generic [ref=e8]: 방역본부
+          - strong [ref=e9]: LOVEBUG
+      - generic "보유 재화" [ref=e10]:
+        - generic [ref=e12]: "0"
+        - generic [ref=e14]: 스프레이
+        - button "상점 열기" [ref=e15]: +
+        - generic [ref=e16]: Lv.1
+        - button "효과음 켜기" [ref=e17]: ♪
+    - region "메인 화면" [ref=e20]:
+      - button "! 민원 접수 공원길" [ref=e28]:
+        - text: "!"
+        - generic [ref=e29]: 민원 접수
+        - strong [ref=e30]: 공원길
+      - button "러브버그 밀도 12%" [ref=e31]:
+        - generic [ref=e32]: 러브버그 밀도
+        - strong [ref=e33]: 12%
+      - region "클린업 현장":
+        - generic:
+          - strong: 홍길동
+        - generic:
+          - generic: 손
+      - region "출동 준비" [ref=e34]:
+        - button "도구 손" [ref=e35]:
+          - generic [ref=e37]: 도구
+          - strong [ref=e38]: 손
+        - button "스킬 스킬 대기" [ref=e39]:
+          - generic [ref=e41]: 스킬
+          - strong [ref=e42]: 스킬 대기
+        - button "현장 출몰지" [ref=e43]:
+          - generic [ref=e44]: 현장
+          - strong [ref=e45]: 출몰지
+        - button "60초 클린업 출동 준비" [ref=e46]:
+          - generic [ref=e47]: 60초 클린업
+          - strong [ref=e48]: 출동 준비
+    - navigation "하단 메뉴" [ref=e49]:
+      - button "로비" [ref=e50]:
+        - strong [ref=e52]: 로비
+      - button "장비" [ref=e53]:
+        - strong [ref=e55]: 장비
+      - button "동료" [ref=e56]:
+        - strong [ref=e58]: 동료
+      - button "지도" [ref=e59]:
+        - strong [ref=e61]: 지도
+      - button "상점" [ref=e62]:
+        - strong [ref=e64]: 상점

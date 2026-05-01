@@ -1,0 +1,59 @@
+- main [ref=e3] [box=0,0,390,844]:
+  - region "러브버그 클린업 게임" [ref=e4] [box=0,0,390,844]:
+    - generic [ref=e5] [box=0,0,390,62]:
+      - button "♥ 방역ON LOVEBUG" [ref=e6] [box=8,8,202,44]:
+        - generic [ref=e7] [box=15,15,29,29]: ♥
+        - generic [ref=e8] [box=55,16,145,27]:
+          - generic [ref=e9] [box=55,16,145,13]: 방역ON
+          - strong [ref=e10] [box=55,29,145,14]: LOVEBUG
+      - generic "보유 재화" [ref=e11] [box=216,9,166,42]:
+        - generic [ref=e13] [box=248,23,7,14]: "0"
+        - generic [ref=e15] [box=292,23,42,15]: 스프레이
+        - button "효과음 켜기" [ref=e16] [box=346,15,30,30]: ♪
+    - region "메인 화면" [ref=e19] [box=0,62,390,712]:
+      - generic [ref=e21] [box=16,74,358,48]:
+        - text: "!"
+        - generic [ref=e22] [box=69,88,225,20]: 민원폭주! 하천변 러브버그 출몰주의
+      - generic "이벤트" [ref=e23] [box=14,130,164,190]:
+        - button "긴급보급 코인 부스트" [ref=e24] [box=14,130,164,58]:
+          - generic [ref=e25] [box=30,143,132,15]: 긴급보급
+          - generic [ref=e26] [box=30,161,132,15]: 코인 부스트
+        - button "월간방역 도구 숙련 보상" [ref=e27] [box=14,196,164,58]:
+          - generic [ref=e28] [box=30,209,132,15]: 월간방역
+          - generic [ref=e29] [box=30,227,132,15]: 도구 숙련 보상
+        - button "출몰주의 오늘의 현장" [ref=e30] [box=14,262,164,58]:
+          - generic [ref=e31] [box=30,275,132,15]: 출몰주의
+          - generic [ref=e32] [box=30,293,132,15]: 오늘의 현장
+      - generic [box=12,192,367,498]:
+        - generic [box=89,633,235,57]:
+          - generic [box=181,645,50,14]: 클린업 등급
+          - strong [box=178,659,56,19]: Lv.1 손
+      - generic "로비 메뉴" [ref=e33] [box=322,146,58,303]:
+        - button "현장" [ref=e34] [box=322,146,58,69]:
+          - generic [ref=e35] [box=341,191,21,15]: 현장
+        - button "보급" [ref=e36] [box=322,224,58,69]:
+          - generic [ref=e37] [box=341,269,21,15]: 보급
+        - button "동료" [ref=e38] [box=322,302,58,69]:
+          - generic [ref=e39] [box=341,347,21,15]: 동료
+        - button "기록" [ref=e40] [box=322,380,58,69]:
+          - generic [ref=e41] [box=341,425,21,15]: 기록
+      - generic [ref=e42] [box=9,644,372,122]:
+        - button "출몰지도" [ref=e43] [box=9,672,93,94]:
+          - generic [ref=e44] [box=28,734,55,20]: 출몰지도
+        - button "HOT ZONE 클린업 준비 북한산 은평 숲길" [ref=e67] [box=110,644,171,122]:
+          - generic [ref=e46] [box=138,649,114,32]: HOT ZONE
+          - strong [ref=e47] [box=121,686,149,26]: 클린업 준비
+          - generic [ref=e48] [box=121,717,149,17]: 북한산 은평 숲길
+        - button "장비실" [ref=e49] [box=288,672,93,94]:
+          - generic [ref=e50] [box=314,734,42,20]: 장비실
+    - navigation "하단 메뉴" [ref=e51] [box=0,774,390,70]:
+      - button "로비" [ref=e52] [box=5,781,74,58]:
+        - strong [ref=e54] [box=9,818,66,14]: 로비
+      - button "장비" [ref=e55] [box=82,781,74,58]:
+        - strong [ref=e57] [box=86,818,66,14]: 장비
+      - button "동료" [ref=e58] [box=158,781,74,58]:
+        - strong [ref=e60] [box=162,818,66,14]: 동료
+      - button "지도" [ref=e61] [box=235,781,74,58]:
+        - strong [ref=e63] [box=239,818,66,14]: 지도
+      - button "상점" [ref=e64] [box=311,781,74,58]:
+        - strong [ref=e66] [box=315,818,66,14]: 상점

@@ -1,0 +1,79 @@
+- main [ref=e3]:
+  - region "러브버그 클린업 테스트" [ref=e4]:
+    - generic [ref=e5]:
+      - button "♥ TEST 레벨 테스트" [ref=e6]:
+        - generic [ref=e7]: ♥
+        - generic [ref=e8]:
+          - generic [ref=e9]: TEST
+          - strong [ref=e10]: 레벨 테스트
+      - generic "보유 재화" [ref=e11]:
+        - generic [ref=e13]: "0"
+        - generic [ref=e15]: 스프레이
+        - button "효과음 켜기" [ref=e16]: ♪
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: 레벨 선택
+        - slider "레벨 선택" [ref=e20]: "1"
+      - generic [ref=e21]:
+        - button "코인 +1000" [ref=e22]
+        - button "장소 랜덤" [ref=e23]
+      - combobox "장소 선택" [ref=e24]:
+        - option "북한산 은평 숲길" [selected]
+        - option "은평 아파트 화단"
+        - option "고양 숲세권 산책로"
+        - option "계양산 밈 산책로"
+        - option "한강공원 물가길"
+        - option "마포 버스정류장"
+        - option "지하철 출구 광장"
+        - option "도심 하천 산책길"
+        - option "흰차 주차장"
+        - option "아파트 방충망 벽"
+      - generic [ref=e25]:
+        - generic [ref=e26]: Lv.1 손 R32
+        - generic [ref=e27]: Lv.5 장갑 R42
+        - generic [ref=e28]: Lv.10 나무 막대기 R48
+        - generic [ref=e29]: Lv.20 신문지 R58
+        - generic [ref=e30]: Lv.30 파리채 R72
+        - generic [ref=e31]: Lv.40 끈끈이 패들 R82
+        - generic [ref=e32]: Lv.50 스프레이 R92
+        - generic [ref=e33]: Lv.60 전기 파리채 R100
+        - generic [ref=e34]: Lv.70 선풍기 R108
+        - generic [ref=e35]: Lv.80 미니 터렛 R112
+        - generic [ref=e36]: Lv.90 클린 드론 R118
+        - generic [ref=e37]: Lv.100 가디언 EX R128
+    - generic [ref=e38]:
+      - text: "!"
+      - region "플레이 화면" [ref=e40]:
+        - region "게임 상태" [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]: Lv
+            - strong [ref=e44]: "1"
+          - generic [ref=e45]:
+            - generic [ref=e46]: 도구
+            - strong [ref=e47]: 손
+          - generic [ref=e48]:
+            - generic [ref=e49]: 점수
+            - strong [ref=e50]: "0"
+          - generic [ref=e51]:
+            - generic [ref=e52]: 콤보
+            - strong [ref=e53]: "0"
+          - generic [ref=e54]:
+            - generic [ref=e55]: 장소
+            - strong [ref=e56]: 북한산 은평 숲길
+          - generic [ref=e57]:
+            - generic [ref=e58]: 범위
+            - strong [ref=e59]: "32"
+        - generic [ref=e60]:
+          - generic "러브버그 게임 화면" [ref=e61]
+          - generic [ref=e62]:
+            - generic [ref=e63]: TEST ZONE
+            - heading "도구 테스트" [level=2] [ref=e64]
+            - paragraph [ref=e65]: 레벨을 바꾸며 타격 범위와 스킬 상태를 확인하세요.
+            - button "테스트 시작" [ref=e66]
+        - generic [ref=e67]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: 다음 레벨
+            - strong [ref=e71]: 0 / 143
+          - button "스킬 대기 Lv.10" [disabled] [ref=e73]:
+            - generic [ref=e74]: 스킬 대기
+            - strong [ref=e75]: Lv.10
