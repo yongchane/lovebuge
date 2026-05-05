@@ -83,7 +83,7 @@ function resizeCanvas() {
 }
 
 const tools = [
-  { level: 1, id: "hand", name: "손", radius: 32, color: "#f8f4df", skill: null, sprite: 0 },
+  { level: 1, id: "hand", name: "방역 장갑", radius: 32, color: "#8de3b2", skill: null, sprite: 0 },
   { level: 5, id: "glove", name: "장갑", radius: 42, color: "#69a7ff", skill: null, sprite: 1 },
   { level: 10, id: "stick", name: "나무 막대기", radius: 48, color: "#c98b55", skill: "라인 톡", sprite: 2 },
   { level: 20, id: "newspaper", name: "신문지", radius: 58, color: "#d9d3b0", skill: "연속 찰싹", sprite: 3 },
@@ -287,24 +287,24 @@ const shopUpgrades = [
 const heroes = [
   {
     id: "gil_dong",
-    name: "홍길동",
-    role: "검기 난무",
+    name: "길동 방역대원",
+    role: "고압 분사 지원",
     sprite: 0,
-    desc: "빠른 검기로 터치 지점을 베어냅니다.",
+    desc: "터치 지점에 빠른 클린업 분사를 보냅니다.",
   },
   {
     id: "woo_chi",
-    name: "전우치",
-    role: "부적 술법",
+    name: "우치 방역기사",
+    role: "유도 램프 지원",
     sprite: 1,
-    desc: "부적과 도술로 주변 벌레를 흔듭니다.",
+    desc: "빛 유도 장비로 주변 러브버그를 흔듭니다.",
   },
   {
     id: "swordmaster",
-    name: "조선 검객",
-    role: "일격 베기",
+    name: "클린업 베테랑",
+    role: "대형 패들 지원",
     sprite: 2,
-    desc: "큰 참격으로 전방을 정리합니다.",
+    desc: "넓은 패들 액션으로 전방을 소탕합니다.",
   },
 ];
 
@@ -645,8 +645,8 @@ function drawToolSprite(tool, x, y, scale = 1, hit = 0) {
 
   const outline = "#10161d";
   if (tool.id === "hand" || tool.id === "glove") {
-    const palm = tool.id === "glove" ? "#5ba1ff" : "#f1c7a1";
-    const shade = tool.id === "glove" ? "#2867bd" : "#c98b6f";
+    const palm = tool.id === "glove" ? "#5ba1ff" : "#8de3b2";
+    const shade = tool.id === "glove" ? "#2867bd" : "#3f9d83";
     rect(-17, -13, 34, 30, outline);
     rect(-13, -10, 28, 24, palm);
     rect(-20, -25, 8, 18, outline);
@@ -757,21 +757,36 @@ function drawWeaponCursor() {
   const hit = Math.max(0, state.weaponHit);
   const x = state.pointer.x + 34 - hit * 18;
   const y = state.pointer.y + 42 - hit * 28;
+  const radius = getAttackRadius();
+
+  ctx.save();
+  ctx.globalAlpha = state.pointer.active ? 0.32 : 0.18;
+  ctx.fillStyle = "rgba(141, 227, 178, 0.35)";
+  ctx.strokeStyle = "rgba(255, 245, 207, 0.72)";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(state.pointer.x, state.pointer.y, radius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+
   ctx.globalAlpha = state.pointer.active ? 1 : 0.82;
-  drawToolSprite(tool, x, y, 1.25, hit);
+  drawToolSprite(tool, x, y, 0.92, hit);
   ctx.globalAlpha = 1;
 
+  ctx.strokeStyle = "#fff5cf";
+  ctx.globalAlpha = 0.72;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(state.pointer.x - 16, state.pointer.y - 16, 32, 32);
   ctx.strokeStyle = tool.color;
-  ctx.globalAlpha = 0.28;
-  ctx.lineWidth = 3;
-  ctx.strokeRect(state.pointer.x - 12, state.pointer.y - 12, 24, 24);
+  ctx.lineWidth = 2;
+  ctx.strokeRect(state.pointer.x - 9, state.pointer.y - 9, 18, 18);
   ctx.globalAlpha = 1;
 }
 
 function drawHeroCharacter() {
   if (!state.running) return;
   const hero = getHero();
-  const sheet = getHeroSheet();
   const attack = state.heroAttack;
   const baseX = W * 0.5;
   const baseY = H + Math.min(H * 0.1, 70);
@@ -780,7 +795,7 @@ function drawHeroCharacter() {
   if (attack > 0) {
     ctx.save();
     ctx.globalAlpha = Math.min(0.75, attack + 0.18);
-    ctx.strokeStyle = hero.id === "woo_chi" ? "#ffd166" : "#f8f4df";
+    ctx.strokeStyle = hero.id === "woo_chi" ? "#ffd166" : "#8de3b2";
     ctx.lineWidth = Math.max(4, W * 0.006);
     ctx.beginPath();
     ctx.moveTo(baseX, baseY - H * 0.2);
@@ -789,35 +804,42 @@ function drawHeroCharacter() {
     ctx.restore();
   }
 
-  if (!sheet) {
-    drawFallbackHero(baseX, baseY, attack);
-    return;
-  }
-
-  const cols = 3;
-  const cellW = sheet.width / cols;
-  const cellH = sheet.height;
-  const sxp = hero.sprite * cellW;
-  const size = Math.min(H * 0.42, W * 0.42, 420);
-  const lean = attack * 18;
-
-  ctx.save();
-  ctx.translate(baseX + (target.x - baseX) * 0.035 * attack, baseY - lean);
-  ctx.rotate(((target.x - baseX) / Math.max(W, 1)) * 0.18 * attack);
-  ctx.globalAlpha = 0.96;
-  ctx.drawImage(sheet, sxp, 0, cellW, cellH, -size / 2, -size, size, size);
-  ctx.restore();
+  drawFallbackHero(baseX + (target.x - baseX) * 0.035 * attack, baseY, attack);
 }
 
 function drawFallbackHero(x, y, attack) {
   ctx.save();
   ctx.translate(x, y - attack * 18);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
+  ctx.fillRect(-58, -24, 116, 18);
+  ctx.fillStyle = "#102a34";
+  ctx.fillRect(-34, -146, 68, 126);
   ctx.fillStyle = "#1d3e63";
-  ctx.fillRect(-36, -150, 72, 130);
-  ctx.fillStyle = "#123041";
-  ctx.fillRect(-52, -160, 104, 18);
-  ctx.fillStyle = "#ffd166";
-  ctx.fillRect(-6, -132, 12, 112);
+  ctx.fillRect(-44, -128, 88, 64);
+  ctx.fillStyle = "#8de3b2";
+  ctx.fillRect(-26, -112, 52, 14);
+  ctx.fillStyle = "#fff5cf";
+  ctx.fillRect(-18, -106, 36, 4);
+  ctx.fillRect(-18, -98, 36, 4);
+  ctx.fillStyle = "#10161d";
+  ctx.fillRect(-52, -160, 104, 16);
+  ctx.fillStyle = "#233f38";
+  ctx.fillRect(-38, -176, 76, 24);
+  ctx.fillStyle = "#8de3b2";
+  ctx.fillRect(-9, -170, 18, 8);
+  ctx.fillStyle = "#f1c7a1";
+  ctx.fillRect(-20, -146, 40, 32);
+  ctx.fillStyle = "#ef4f45";
+  ctx.fillRect(-72, -112, 22, 54);
+  ctx.fillStyle = "#fff5cf";
+  ctx.fillRect(-68, -104, 14, 28);
+  ctx.fillStyle = "#8de3b2";
+  ctx.fillRect(-50, -92, 42, 12);
+  ctx.fillRect(34, -96, 54, 10);
+  ctx.fillRect(76, -104, 10, 26);
+  ctx.fillStyle = "#102a34";
+  ctx.fillRect(-42, -20, 28, 46);
+  ctx.fillRect(14, -20, 28, 46);
   ctx.restore();
 }
 
@@ -975,10 +997,10 @@ function drawEffects(dt) {
   state.splats = state.splats.filter((splat) => {
     splat.life -= dt;
     const t = Math.max(0, splat.life / splat.max);
-    ctx.globalAlpha = Math.min(0.9, t + 0.12);
-    ctx.fillStyle = "#8f1018";
-    ctx.fillRect(splat.x - 8 * splat.power, splat.y - 5 * splat.power, 16 * splat.power, 10 * splat.power);
-    ctx.fillStyle = "#e51f2d";
+    ctx.globalAlpha = Math.min(0.86, t + 0.1);
+    ctx.fillStyle = "rgba(141, 227, 178, 0.72)";
+    ctx.fillRect(splat.x - 10 * splat.power, splat.y - 7 * splat.power, 20 * splat.power, 14 * splat.power);
+    ctx.fillStyle = "#fff5cf";
     for (let i = 0; i < splat.dots; i += 1) {
       const a = (i * 2.399 + splat.x) % (Math.PI * 2);
       const d = 8 + ((i * 13) % 44) * splat.power;
@@ -1006,6 +1028,11 @@ function drawEffects(dt) {
       ctx.strokeRect(effect.x - effect.r * (1 - t), effect.y - effect.r * (1 - t), effect.r * 2 * (1 - t), effect.r * 2 * (1 - t));
     } else if (effect.kind === "text") {
       pixelText(effect.text, effect.x, effect.y - (1 - t) * 26, 20, effect.color, "center");
+    } else if (effect.kind === "cleanupPop") {
+      ctx.strokeStyle = "#fff5cf";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(effect.x - 54 * (1 - t), effect.y - 28 * (1 - t), 108 * (1 - t), 56 * (1 - t));
+      pixelText(effect.text || "소탕!", effect.x, effect.y - (1 - t) * 18, 22, effect.color, "center");
     } else if (effect.kind === "beam") {
       ctx.fillStyle = effect.color;
       ctx.fillRect(effect.x - 8, 0, 16, H);
@@ -1148,7 +1175,8 @@ function drawGeneratedEffect(effect, t) {
 }
 
 function addEffect(kind, x, y, color, text = "") {
-  state.effects.push({ kind, x, y, color, text, r: 76, life: 0.5, max: 0.5 });
+  const life = kind === "cleanupPop" ? 0.62 : 0.5;
+  state.effects.push({ kind, x, y, color, text, r: 76, life, max: life });
 }
 
 function addToolImpact(tool, x, y, isGold = false) {
@@ -1168,6 +1196,7 @@ function addToolImpact(tool, x, y, isGold = false) {
     guardian: "guardianBurst",
   };
   addEffect(kindByTool[tool.id] || "burst", x, y, color);
+  addEffect("cleanupPop", x, y - 18, isGold ? "#ffd166" : "#fff5cf", isGold ? "골드 소탕!" : "소탕!");
 }
 
 function addHeroAttackEffect(x, y) {
@@ -1180,11 +1209,11 @@ function addHeroAttackEffect(x, y) {
     toY: y,
     x,
     y,
-    color: hero.id === "woo_chi" ? "#ffd166" : "#8de3ff",
+    color: hero.id === "woo_chi" ? "#ffd166" : "#8de3b2",
     life: 0.42,
     max: 0.42,
   });
-  addEffect(hero.id === "woo_chi" ? "zap" : "ring", x, y, hero.id === "swordmaster" ? "#d8f7ff" : "#8de3ff");
+  addEffect(hero.id === "woo_chi" ? "zap" : "ring", x, y, hero.id === "swordmaster" ? "#d8f7ff" : "#8de3b2");
 }
 
 function catchAt(x, y, fromSkill = false) {
@@ -1218,7 +1247,8 @@ function catchAt(x, y, fromSkill = false) {
     state.combo += caught;
     state.bestCombo = Math.max(state.bestCombo, state.combo);
     addEffect("ring", x, y, tool.color);
-    addEffect("text", x, y - 24, caught >= 4 ? "#ffd166" : "#f8f4df", `+${caught}`);
+    addEffect("text", x, y - 24, caught >= 4 ? "#ffd166" : "#f8f4df", caught >= 4 ? `${caught} COMBO` : `+${caught}`);
+    if (caught >= 6) addEffect("cleanupPop", x, y - 54, "#ffd166", "박멸 콤보!");
     state.shake = Math.min(12, state.shake + 3 + caught * 0.8);
     beep(380 + Math.min(500, state.combo * 8), 0.035);
     levelUpCheck();
@@ -1234,7 +1264,7 @@ function levelUpCheck() {
     state.exp -= req;
     state.level += 1;
     const tool = getTool();
-    addEffect("text", W / 2, 150, "#ffd166", `LV ${state.level}`);
+    addEffect("text", W / 2, 150, "#ffd166", `장비 LV ${state.level}`);
     addEffect("ring", W / 2, 170, tool.color);
     req = requiredExp(state.level);
   }
@@ -1243,6 +1273,7 @@ function levelUpCheck() {
 
 function useSkill() {
   if (!state.running || state.skillReady > 0 || state.level < 10) return;
+  addEffect("cleanupPop", W / 2, 112, "#ffd166", "스킬 발동!");
   const purchasedSkill = getEquippedSkill();
   if (purchasedSkill && state.unlockedSkills.includes(purchasedSkill.id)) {
     state.skillReady = getSkillCooldown(purchasedSkill);
@@ -1324,7 +1355,7 @@ function usePurchasedSkill(skill) {
 
   if (skill.id === "coinFever") {
     state.coinFever = 5;
-    addEffect("text", W / 2, 120, "#ffd166", "COIN x3");
+    addEffect("text", W / 2, 120, "#ffd166", "보상 x3");
   }
 }
 
@@ -1411,7 +1442,7 @@ function render(dt) {
   drawWeaponCursor();
   ctx.restore();
 
-  pixelText(`${Math.ceil(state.time)}s`, W - 28, 42, 30, state.time < 10 ? "#ef6f6c" : "#f8f4df", "right");
+  pixelText(`긴급 방역 ${Math.ceil(state.time)}s`, W - 28, 42, 24, state.time < 10 ? "#ef6f6c" : "#f8f4df", "right");
   if (state.running) {
     const tool = getTool();
     pixelText(tool.name, 26, H - 28, 22, tool.color);
@@ -1437,6 +1468,7 @@ function getUiSnapshot() {
     toolName: tool.name,
     score: state.score.toLocaleString("ko-KR"),
     combo: state.combo,
+    timeLeft: Math.max(0, Math.ceil(state.time)),
     coins: state.coins.toLocaleString("ko-KR"),
     venueName: getVenue().name,
     range: getAttackRadius(),
@@ -1485,23 +1517,23 @@ function updateUi() {
   const tool = getTool();
   const req = requiredExp(state.level);
   const skill = getEquippedSkill();
-  ui.level.textContent = state.level;
-  ui.tool.textContent = tool.name;
-  ui.score.textContent = state.score.toLocaleString("ko-KR");
-  ui.combo.textContent = state.combo;
-  ui.coin.textContent = state.coins.toLocaleString("ko-KR");
+  if (ui.level) ui.level.textContent = state.level;
+  if (ui.tool) ui.tool.textContent = tool.name;
+  if (ui.score) ui.score.textContent = state.score.toLocaleString("ko-KR");
+  if (ui.combo) ui.combo.textContent = state.combo;
+  if (ui.coin) ui.coin.textContent = state.coins.toLocaleString("ko-KR");
   if (ui.venue) ui.venue.textContent = getVenue().name;
   if (ui.range) ui.range.textContent = getAttackRadius();
-  ui.exp.textContent = state.level >= 100 ? "MAX" : `${state.exp} / ${req}`;
-  ui.expBar.style.width = state.level >= 100 ? "100%" : `${Math.min(100, (state.exp / req) * 100)}%`;
+  if (ui.exp) ui.exp.textContent = state.level >= 100 ? "MAX" : `${state.exp} / ${req}`;
+  if (ui.expBar) ui.expBar.style.width = state.level >= 100 ? "100%" : `${Math.min(100, (state.exp / req) * 100)}%`;
 
-  ui.skillName.textContent = skill ? skill.name : tool.skill || "스킬 대기";
+  if (ui.skillName) ui.skillName.textContent = skill ? skill.name : tool.skill || "스킬 대기";
   if (state.level < 10) {
-    ui.skillButton.disabled = true;
-    ui.skillCharge.textContent = "Lv.10";
+    if (ui.skillButton) ui.skillButton.disabled = true;
+    if (ui.skillCharge) ui.skillCharge.textContent = "Lv.10";
   } else {
-    ui.skillButton.disabled = !state.running || state.skillReady > 0;
-    ui.skillCharge.textContent = state.skillReady > 0 ? `${state.skillReady.toFixed(1)}s` : state.coinFever > 0 ? `x3 ${state.coinFever.toFixed(1)}` : "사용";
+    if (ui.skillButton) ui.skillButton.disabled = !state.running || state.skillReady > 0;
+    if (ui.skillCharge) ui.skillCharge.textContent = state.skillReady > 0 ? `${state.skillReady.toFixed(1)}s` : state.coinFever > 0 ? `x3 ${state.coinFever.toFixed(1)}` : "사용";
   }
   renderShop();
   renderTestPanel();

@@ -313,6 +313,86 @@ p {
   backdrop-filter: blur(2px);
 }
 
+.lobby-brief {
+  position: absolute;
+  z-index: 7;
+  top: 66px;
+  left: 14px;
+  right: 96px;
+  display: grid;
+  gap: 4px;
+  color: #fff5cf;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.38);
+}
+
+.lobby-brief span {
+  width: fit-content;
+  padding: 5px 8px;
+  border: 2px solid var(--bug-shadow);
+  border-radius: 7px;
+  color: #24191f;
+  background: var(--bug-mint);
+  box-shadow: var(--tap-shadow);
+  font-size: 11px;
+  font-weight: 1000;
+}
+
+.lobby-brief h1 {
+  font-size: 34px;
+  line-height: 0.98;
+  -webkit-text-stroke: 1px var(--bug-shadow);
+}
+
+.lobby-brief p {
+  max-width: 250px;
+  color: rgba(255, 245, 207, 0.94);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.lobby-status-strip {
+  position: absolute;
+  z-index: 9;
+  left: 12px;
+  right: 12px;
+  bottom: 142px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.lobby-status-strip button {
+  min-width: 0;
+  min-height: 58px;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  padding: 7px;
+  border: 2px solid var(--bug-shadow);
+  border-radius: var(--pixel-radius);
+  color: #24191f;
+  background: rgba(255, 245, 207, 0.94);
+  box-shadow: var(--panel-shadow);
+  text-align: left;
+}
+
+.lobby-status-strip b,
+.lobby-status-strip small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lobby-status-strip b {
+  font-size: 13px;
+}
+
+.lobby-status-strip small {
+  color: #7e2f3b;
+  font-size: 10px;
+  font-weight: 1000;
+}
+
 .notice-card::before {
   content: "!";
   width: 24px;
@@ -381,6 +461,11 @@ p {
   gap: 9px;
 }
 
+.home-screen .event-stack,
+.home-screen .right-rail {
+  display: none;
+}
+
 .right-rail button {
   width: 64px;
   min-height: 66px;
@@ -437,9 +522,9 @@ p {
   position: absolute;
   z-index: 4;
   left: 50%;
-  bottom: 150px;
+  bottom: 178px;
   width: min(94%, 420px);
-  height: min(62%, 540px);
+  height: min(58%, 500px);
   transform: translateX(-50%);
   pointer-events: none;
 }
@@ -461,7 +546,7 @@ p {
   position: absolute;
   left: 50%;
   bottom: 18px;
-  width: min(116%, 430px);
+  width: min(108%, 410px);
   max-height: 100%;
   object-fit: contain;
   transform: translateX(-50%);
@@ -503,7 +588,7 @@ p {
   z-index: 12;
   left: 9px;
   right: 9px;
-  bottom: 8px;
+  bottom: 10px;
   display: grid;
   grid-template-columns: 0.78fr 1.44fr 0.78fr;
   gap: 8px;
@@ -550,8 +635,8 @@ p {
   min-height: 122px;
   padding: 8px 9px 12px;
   background:
-    linear-gradient(180deg, rgba(139, 224, 190, 0.2), rgba(139, 224, 190, 0)),
-    #23483f;
+    linear-gradient(180deg, rgba(255, 211, 77, 0.22), rgba(139, 224, 190, 0.08)),
+    #1f6f5b;
 }
 
 .ready-btn small {
@@ -569,7 +654,7 @@ p {
 
 .ready-btn strong {
   color: var(--bug-cream);
-  font-size: 31px;
+  font-size: 29px;
   line-height: 1;
   -webkit-text-stroke: 1px #3a2437;
   text-shadow: 0 3px 0 #3a2437;
@@ -779,7 +864,7 @@ p {
   grid-template-rows: auto auto minmax(0, 1fr) auto auto;
   gap: 10px;
   background:
-    linear-gradient(180deg, rgba(36, 25, 47, 0.9), rgba(23, 20, 33, 0.96)),
+    linear-gradient(180deg, rgba(35, 72, 63, 0.82), rgba(23, 20, 33, 0.96)),
     url("assets/maps/subway-exit.png") center / cover;
 }
 
@@ -990,7 +1075,7 @@ p {
 }
 
 .select-screen {
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
 }
 
 .loadout-screen {
@@ -1006,10 +1091,68 @@ p {
   overflow: auto;
 }
 
+.briefing-card {
+  position: relative;
+  min-height: 128px;
+  display: grid;
+  align-content: end;
+  gap: 5px;
+  margin: 0 12px;
+  padding: 13px;
+  overflow: hidden;
+  border: 3px solid #3a2437;
+  border-radius: var(--panel-radius);
+  color: #fff5cf;
+  background:
+    linear-gradient(180deg, rgba(23, 20, 33, 0.04), rgba(23, 20, 33, 0.75)),
+    var(--venue-image, url("assets/maps/han-river-park.png")) center / cover;
+  box-shadow: var(--panel-shadow);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+.briefing-card::before {
+  content: "ALERT";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 8px;
+  border: 2px solid #3a2437;
+  border-radius: 7px;
+  color: #fff5cf;
+  background: var(--bug-coral);
+  box-shadow: var(--tap-shadow);
+  font-size: 11px;
+  font-weight: 1000;
+}
+
+.briefing-card span,
+.briefing-card strong,
+.briefing-card small {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.briefing-card span {
+  color: var(--bug-mint);
+  font-size: 11px;
+  font-weight: 1000;
+}
+
+.briefing-card strong {
+  font-size: 24px;
+  line-height: 1.04;
+}
+
+.briefing-card small {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .loadout-grid article,
 .selected-card {
   min-width: 0;
-  min-height: 128px;
+  min-height: 146px;
   display: grid;
   gap: 5px;
   padding: 12px;
@@ -1052,6 +1195,29 @@ p {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-shadow: none;
+}
+
+.loadout-grid .selected-card {
+  align-content: end;
+}
+
+.loadout-grid .sprite-preview {
+  width: 76px;
+  height: 76px;
+}
+
+.loadout-grid .hero-preview {
+  background-image: url("assets/ui/lobby-exterminator-v2.png");
+  background-size: contain;
+}
+
+.loadout-grid .selected-card > strong {
+  font-size: 18px;
+  white-space: normal;
+}
+
+.loadout-grid .selected-card > small {
+  white-space: normal;
 }
 
 .loadout-grid strong {
@@ -1143,8 +1309,8 @@ p {
 .hero-preview {
   width: 132px;
   height: 132px;
-  background-image: url("assets/hero-spritesheet-preview.png");
-  background-size: 300% 100%;
+  background-image: url("assets/ui/lobby-exterminator-v2.png");
+  background-size: contain;
 }
 
 .skill-preview {
@@ -1352,15 +1518,17 @@ p {
 
 .play-screen {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto auto;
   gap: 7px;
   padding: 0 8px 8px;
-  background: #171421;
+  background:
+    linear-gradient(180deg, #233f38, #171421 58%),
+    #171421;
 }
 
 .hud-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 0.9fr 1fr 1fr 1.1fr;
   gap: 5px;
 }
 
@@ -1378,11 +1546,19 @@ p {
   box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18);
 }
 
+.hud-item:first-child {
+  background: #7e2f3b;
+}
+
+.hud-item:nth-child(3) {
+  background: #23483f;
+}
+
 .hud-item strong {
   display: block;
   overflow: hidden;
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1492,8 +1668,33 @@ canvas {
   border-color: #3a2437;
   border-radius: var(--pixel-radius);
   color: #fff;
-  background: #ef4f45;
+  background:
+    linear-gradient(180deg, rgba(255, 211, 77, 0.2), transparent),
+    #ef4f45;
   font-weight: 1000;
+}
+
+@media (max-height: 760px) {
+  .lobby-brief h1 {
+    font-size: 28px;
+  }
+
+  .hero-showcase {
+    bottom: 166px;
+    height: min(52%, 440px);
+  }
+
+  .lobby-status-strip {
+    bottom: 134px;
+  }
+
+  .ready-btn {
+    min-height: 108px;
+  }
+
+  .side-cta {
+    min-height: 84px;
+  }
 }
 
 .skill-btn span,

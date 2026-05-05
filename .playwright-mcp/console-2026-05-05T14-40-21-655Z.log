@@ -1,0 +1,18 @@
+[     216ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=ad80126c:20100
+[     288ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
+[     340ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateUi (http://localhost:5173/src/gameEngine.js?t=1777991895078:1521:24)
+    at http://localhost:5173/src/gameEngine.js?t=1777991895078:1769:1
+[    2353ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateUi (http://localhost:5173/src/gameEngine.js?t=1777991895078:1521:24)
+    at startRound (http://localhost:5173/src/gameEngine.js?t=1777991895078:1566:3)
+    at http://localhost:5173/src/App.jsx?t=1777991895078:1246:40
+[   39270ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=ad80126c:20100
+[   39330ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at updateUi (http://localhost:5173/src/gameEngine.js?t=1777991895078:1521:24)
+    at http://localhost:5173/src/gameEngine.js?t=1777991895078:1769:1
+[   77617ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=ad80126c:20100
+[  143246ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=ad80126c:20100
+[  183960ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=ad80126c:20100
+[  237635ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:864
+[  266322ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=ded305fa:20100
