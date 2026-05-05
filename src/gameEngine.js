@@ -83,7 +83,7 @@ function resizeCanvas() {
 }
 
 const tools = [
-  { level: 1, id: "hand", name: "방역 장갑", radius: 32, color: "#8de3b2", skill: null, sprite: 0 },
+  { level: 1, id: "hand", name: "손", radius: 32, color: "#f8f4df", skill: null, sprite: 0 },
   { level: 5, id: "glove", name: "장갑", radius: 42, color: "#69a7ff", skill: null, sprite: 1 },
   { level: 10, id: "stick", name: "나무 막대기", radius: 48, color: "#c98b55", skill: "라인 톡", sprite: 2 },
   { level: 20, id: "newspaper", name: "신문지", radius: 58, color: "#d9d3b0", skill: "연속 찰싹", sprite: 3 },
@@ -287,24 +287,24 @@ const shopUpgrades = [
 const heroes = [
   {
     id: "gil_dong",
-    name: "길동 방역대원",
-    role: "고압 분사 지원",
+    name: "홍길동",
+    role: "쌍권총 속사",
     sprite: 0,
-    desc: "터치 지점에 빠른 클린업 분사를 보냅니다.",
+    desc: "터치 지점에 빠른 지원 사격을 보냅니다.",
   },
   {
     id: "woo_chi",
-    name: "우치 방역기사",
-    role: "유도 램프 지원",
+    name: "전우치",
+    role: "부적 유도탄",
     sprite: 1,
-    desc: "빛 유도 장비로 주변 러브버그를 흔듭니다.",
+    desc: "부적 탄환으로 주변 러브버그를 끌어모읍니다.",
   },
   {
     id: "swordmaster",
-    name: "클린업 베테랑",
-    role: "대형 패들 지원",
+    name: "사무라이",
+    role: "참격 샷",
     sprite: 2,
-    desc: "넓은 패들 액션으로 전방을 소탕합니다.",
+    desc: "검풍 같은 관통탄으로 전방을 처치합니다.",
   },
 ];
 
@@ -333,6 +333,7 @@ const state = {
   sound: false,
   lastTime: 0,
   autoTimer: 0,
+  bossSpawned: false,
   shake: 0,
   pointer: { x: W / 2, y: H * 0.72, active: false },
   weaponHit: 0,
@@ -568,7 +569,9 @@ function processToolSprites() {
     const r = pixels.data[i];
     const g = pixels.data[i + 1];
     const b = pixels.data[i + 2];
-    if (r > 170 && g < 95 && b > 170) pixels.data[i + 3] = 0;
+    const magentaKey = r > 170 && g < 95 && b > 170;
+    const greenKey = g > 135 && g - Math.max(r, b) > 55;
+    if (magentaKey || greenKey) pixels.data[i + 3] = 0;
   }
   sheetCtx.putImageData(pixels, 0, 0);
   processedToolSprites = sheet;
@@ -586,7 +589,9 @@ function processChromaSprite(image, cacheSetter) {
     const r = pixels.data[i];
     const g = pixels.data[i + 1];
     const b = pixels.data[i + 2];
-    if (r > 170 && g < 95 && b > 170) pixels.data[i + 3] = 0;
+    const magentaKey = r > 170 && g < 95 && b > 170;
+    const greenKey = g > 135 && g - Math.max(r, b) > 55;
+    if (magentaKey || greenKey) pixels.data[i + 3] = 0;
   }
   sheetCtx.putImageData(pixels, 0, 0);
   cacheSetter(sheet);
@@ -787,6 +792,7 @@ function drawWeaponCursor() {
 function drawHeroCharacter() {
   if (!state.running) return;
   const hero = getHero();
+  const sheet = getHeroSheet();
   const attack = state.heroAttack;
   const baseX = W * 0.5;
   const baseY = H + Math.min(H * 0.1, 70);
@@ -794,17 +800,41 @@ function drawHeroCharacter() {
 
   if (attack > 0) {
     ctx.save();
-    ctx.globalAlpha = Math.min(0.75, attack + 0.18);
-    ctx.strokeStyle = hero.id === "woo_chi" ? "#ffd166" : "#8de3b2";
-    ctx.lineWidth = Math.max(4, W * 0.006);
+    ctx.globalAlpha = Math.min(0.92, attack + 0.24);
+    ctx.strokeStyle = hero.id === "woo_chi" ? "#ffd166" : hero.id === "swordmaster" ? "#d8f7ff" : "#8de3b2";
+    ctx.lineWidth = Math.max(7, W * 0.011);
     ctx.beginPath();
-    ctx.moveTo(baseX, baseY - H * 0.2);
+    ctx.moveTo(baseX, baseY - H * 0.25);
     ctx.lineTo(target.x, target.y);
+    ctx.stroke();
+    ctx.strokeStyle = "#fff5cf";
+    ctx.lineWidth = Math.max(2, W * 0.004);
     ctx.stroke();
     ctx.restore();
   }
 
-  drawFallbackHero(baseX + (target.x - baseX) * 0.035 * attack, baseY, attack);
+  if (!sheet) {
+    drawFallbackHero(baseX + (target.x - baseX) * 0.035 * attack, baseY, attack);
+    return;
+  }
+
+  const cols = 3;
+  const cellW = sheet.width / cols;
+  const cellH = sheet.height;
+  const sxp = hero.sprite * cellW;
+  const size = Math.min(H * 0.34, W * 0.36, 360);
+  const lean = attack * 18;
+
+  ctx.save();
+  ctx.translate(baseX + (target.x - baseX) * 0.045 * attack, baseY - lean);
+  ctx.rotate(((target.x - baseX) / Math.max(W, 1)) * 0.16 * attack);
+  ctx.globalAlpha = 0.98;
+  ctx.drawImage(sheet, sxp, 0, cellW, cellH, -size / 2, -size, size, size);
+  ctx.fillStyle = "rgba(15, 22, 29, 0.88)";
+  ctx.fillRect(-size * 0.28, -size * 0.82, size * 0.56, size * 0.14);
+  ctx.fillStyle = hero.id === "woo_chi" ? "#ffd166" : hero.id === "swordmaster" ? "#d8f7ff" : "#8de3b2";
+  ctx.fillRect(-size * 0.2, -size * 0.78, size * 0.4, size * 0.035);
+  ctx.restore();
 }
 
 function drawFallbackHero(x, y, attack) {
@@ -882,7 +912,13 @@ function spawnBug(forceType) {
     mosquito: { value: 30, exp: 8, speed: 1.55, size: 0.95, sprite: 3 },
     goldPair: { value: 95, exp: 20, speed: 1.05, size: 1.28, sprite: 4 },
     fastFly: { value: 35, exp: 9, speed: 1.8, size: 0.82, sprite: 5 },
+    bossLovebug: { value: 900, exp: 90, speed: 0.72, size: 4.2, sprite: 0, hp: 28 + Math.floor(state.level * 0.34) },
   }[type] || { value: 15, exp: 5, speed: 1, size: 1, sprite: 1 };
+
+  if (type === "bossLovebug") {
+    x = W * 0.5;
+    y = sy(128);
+  }
 
   const bug = {
     id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
@@ -897,6 +933,10 @@ function spawnBug(forceType) {
     life: 1,
     value: profile.value,
     exp: profile.exp,
+    hp: profile.hp || 1,
+    maxHp: profile.hp || 1,
+    phase: 0,
+    patternTimer: 0,
   };
   state.bugs.push(bug);
 }
@@ -983,14 +1023,51 @@ function drawGeneratedInsect(bug) {
   const sxp = (sprite % cols) * cellW;
   const syp = Math.floor(sprite / cols) * cellH;
   const bob = Math.sin(bug.wobble) * 3;
-  const size = bug.size * (bug.type === "mosquito" ? 2.0 : 2.25);
+  const size = bug.size * (bug.type === "bossLovebug" ? 2.6 : bug.type === "mosquito" ? 2.0 : 2.25);
 
   ctx.save();
   ctx.translate(Math.round(bug.x), Math.round(bug.y + bob));
   ctx.rotate(Math.sin(bug.wobble * 0.45) * 0.08);
   ctx.drawImage(sheet, sxp, syp, cellW, cellH, -size / 2, -size / 2, size, size);
+  if (bug.type === "bossLovebug") {
+    const barW = Math.min(W * 0.58, size * 0.9);
+    const hpT = Math.max(0, bug.hp / bug.maxHp);
+    ctx.fillStyle = "#171421";
+    ctx.fillRect(-barW / 2, -size * 0.62, barW, 10);
+    ctx.fillStyle = "#ef4f45";
+    ctx.fillRect(-barW / 2, -size * 0.62, barW * hpT, 10);
+    ctx.strokeStyle = "#fff5cf";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-barW / 2, -size * 0.62, barW, 10);
+    pixelText("BOSS", 0, -size * 0.7, 16, "#ffd166", "center");
+  }
   ctx.restore();
   return true;
+}
+
+function drawBossHud() {
+  const boss = state.bugs.find((bug) => bug.type === "bossLovebug");
+  if (!state.running || !boss) return;
+  const hpT = Math.max(0, boss.hp / boss.maxHp);
+  const x = sx(90);
+  const y = sy(104);
+  const w = W - sx(180);
+  const h = sy(18);
+  ctx.save();
+  ctx.fillStyle = "rgba(23, 20, 33, 0.86)";
+  ctx.fillRect(x - sx(8), y - sy(26), w + sx(16), h + sy(36));
+  ctx.fillStyle = "#fff5cf";
+  ctx.font = `${Math.max(13, W * 0.032)}px ui-monospace, monospace`;
+  ctx.textAlign = "center";
+  ctx.fillText("보스 러브버그", W / 2, y - sy(8));
+  ctx.fillStyle = "#171421";
+  ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = "#ef4f45";
+  ctx.fillRect(x, y, w * hpT, h);
+  ctx.strokeStyle = "#ffd34d";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(x, y, w, h);
+  ctx.restore();
 }
 
 function drawEffects(dt) {
@@ -1226,17 +1303,32 @@ function catchAt(x, y, fromSkill = false) {
   for (const bug of state.bugs) {
     const dist = Math.hypot(bug.x - x, bug.y - y);
     const lineHit = state.level >= 10 && Math.abs(bug.y - y) < radius * 0.42 && Math.abs(bug.x - x) < radius * 1.35;
-    const circleHit = dist <= radius || (fromSkill && dist <= radius * 1.2) || lineHit;
+    const bossRadius = bug.type === "bossLovebug" ? bug.size * 2.2 : 0;
+    const circleHit = dist <= radius + bossRadius || (fromSkill && dist <= radius * 1.2 + bossRadius) || lineHit;
     if (circleHit) {
-      caught += 1;
-      state.catches += bug.type === "lovebugPair" || bug.type === "goldPair" ? 2 : 1;
+      const isBoss = bug.type === "bossLovebug";
+      const damage = isBoss ? Math.max(1, Math.floor(1 + getAttackRadius() / 38 + (fromSkill ? 2 : 0))) : 1;
+      if (isBoss) {
+        bug.hp -= damage;
+        addEffect("text", bug.x, bug.y - bug.size * 2.8, "#ffd166", `-${damage}`);
+      }
+      const defeated = !isBoss || bug.hp <= 0;
+      if (!defeated) {
+        remaining.push(bug);
+        addToolImpact(tool, bug.x, bug.y, false);
+        state.shake = Math.min(10, state.shake + 2.4);
+        continue;
+      }
+      caught += isBoss ? 8 : 1;
+      state.catches += isBoss ? 15 : bug.type === "lovebugPair" || bug.type === "goldPair" ? 2 : 1;
       const comboBonus = 1 + Math.min(state.combo, 80) * (0.025 + getUpgradeLevel("comboDrive") * 0.0015);
       const levelBonus = 1 + state.level * 0.035 + getUpgradeLevel("toolTraining") * 0.025;
       state.score += Math.floor(bug.value * comboBonus * levelBonus);
       state.exp += bug.exp;
-      state.coins += Math.max(1, Math.floor((bug.type === "goldPair" ? 6 : 1) * (state.coinFever > 0 ? 3 : 1) * getCoinMultiplier()));
-      drawSplat(bug.x, bug.y, bug.type === "lovebugPair" || bug.type === "goldPair" ? 1.4 : 1);
+      state.coins += Math.max(1, Math.floor((isBoss ? 24 : bug.type === "goldPair" ? 6 : 1) * (state.coinFever > 0 ? 3 : 1) * getCoinMultiplier()));
+      drawSplat(bug.x, bug.y, isBoss ? 2.8 : bug.type === "lovebugPair" || bug.type === "goldPair" ? 1.4 : 1);
       addToolImpact(tool, bug.x, bug.y, bug.type === "goldPair");
+      if (isBoss) addEffect("cleanupPop", bug.x, bug.y - bug.size * 2.4, "#ffd166", "보스 처치!");
     } else {
       remaining.push(bug);
     }
@@ -1368,6 +1460,13 @@ function update(dt) {
   state.lastSpawn += dt * 1000;
   state.spawnEvery = Math.max(190, 850 - state.level * 6 - Math.floor((ROUND_TIME - state.time) * 5));
 
+  if (!state.bossSpawned && state.time < ROUND_TIME - 24) {
+    state.bossSpawned = true;
+    spawnBug("bossLovebug");
+    addEffect("cleanupPop", W / 2, sy(118), "#ffd166", "보스 러브버그!");
+    state.shake = 16;
+  }
+
   while (state.lastSpawn > state.spawnEvery) {
     state.lastSpawn -= state.spawnEvery;
     spawnBug();
@@ -1391,7 +1490,37 @@ function update(dt) {
 
   for (const bug of state.bugs) {
     const venue = getVenue();
-    bug.wobble += dt * (bug.type === "fly" || bug.type === "fastFly" || bug.type === "mosquito" ? 7 : 3);
+    bug.wobble += dt * (bug.type === "bossLovebug" ? 2.6 : bug.type === "fly" || bug.type === "fastFly" || bug.type === "mosquito" ? 7 : 3);
+    if (bug.type === "bossLovebug") {
+      bug.patternTimer -= dt;
+      if (bug.patternTimer <= 0) {
+        bug.patternTimer = 1.1 + Math.random() * 1.4;
+        bug.phase = Math.floor(Math.random() * 4);
+        if (bug.phase === 1) {
+          bug.vx = (Math.random() > 0.5 ? 1 : -1) * (150 + Math.random() * 130);
+          bug.vy = 20 + Math.random() * 80;
+        }
+        if (bug.phase === 2) {
+          for (let i = 0; i < 3; i += 1) spawnBug(i % 2 ? "fastFly" : "lovebugPair");
+          addEffect("ring", bug.x, bug.y, "#ef4f45");
+        }
+        if (bug.phase === 3) {
+          bug.vx += (W / 2 - bug.x) * 1.4;
+          bug.vy = -40 - Math.random() * 60;
+        }
+      }
+      const homeX = W / 2 + Math.sin(bug.wobble * 0.45) * W * 0.2;
+      const homeY = sy(150) + Math.cos(bug.wobble * 0.35) * sy(36);
+      bug.vx += (homeX - bug.x) * 0.42 * dt;
+      bug.vy += (homeY - bug.y) * 0.34 * dt;
+      bug.x += bug.vx * dt;
+      bug.y += bug.vy * dt;
+      bug.vx *= 0.982;
+      bug.vy *= 0.982;
+      if (bug.x < sx(80) || bug.x > W - sx(80)) bug.vx *= -0.8;
+      bug.y = Math.max(sy(88), Math.min(H * 0.54, bug.y));
+      continue;
+    }
     const attractedX = bug.y > sy(540) ? sx(venue.attract.x) : bug.x < sx(210) ? sx(venue.field.x[0] + 70) : bug.x;
     bug.vx += (attractedX - bug.x) * 0.025 * dt;
     bug.x += (bug.vx + Math.sin(bug.wobble) * (bug.type === "fly" || bug.type === "fastFly" ? 88 : bug.type === "mosquito" ? 58 : 24)) * dt;
@@ -1408,7 +1537,7 @@ function update(dt) {
   });
 
   const before = state.bugs.length;
-  state.bugs = state.bugs.filter((bug) => bug.y < H + 50);
+  state.bugs = state.bugs.filter((bug) => bug.type === "bossLovebug" || bug.y < H + 50);
   if (state.bugs.length < before) state.combo = Math.max(0, state.combo - 4);
 
   state.skillReady = Math.max(0, state.skillReady - dt);
@@ -1438,6 +1567,7 @@ function render(dt) {
 
   state.bugs.forEach(drawLovebug);
   drawEffects(dt);
+  drawBossHud();
   drawHeroCharacter();
   drawWeaponCursor();
   ctx.restore();
@@ -1553,6 +1683,7 @@ function startRound() {
   state.splats = [];
   state.skillReady = 0;
   state.autoTimer = 0;
+  state.bossSpawned = false;
   state.coinFever = 0;
   state.pointer.x = W / 2;
   state.pointer.y = H * 0.72;

@@ -506,7 +506,7 @@ p {
 
 .right-rail .crew,
 .nav-icon.crew {
-  --icon-bg: url("assets/ui/lobby-exterminator-v2.png");
+  --icon-bg: url("assets/hero-spritesheet-preview.png");
 }
 
 .right-rail .record {
@@ -545,12 +545,16 @@ p {
 .hero-showcase img {
   position: absolute;
   left: 50%;
-  bottom: 18px;
-  width: min(108%, 410px);
+  bottom: 14px;
+  width: min(128%, 500px);
   max-height: 100%;
   object-fit: contain;
   transform: translateX(-50%);
   filter: drop-shadow(0 16px 10px rgba(0, 0, 0, 0.38));
+}
+
+.generated-hero-art {
+  mix-blend-mode: normal;
 }
 
 .hero-status {
@@ -654,7 +658,7 @@ p {
 
 .ready-btn strong {
   color: var(--bug-cream);
-  font-size: 29px;
+  font-size: 28px;
   line-height: 1;
   -webkit-text-stroke: 1px #3a2437;
   text-shadow: 0 3px 0 #3a2437;
@@ -1207,8 +1211,8 @@ p {
 }
 
 .loadout-grid .hero-preview {
-  background-image: url("assets/ui/lobby-exterminator-v2.png");
-  background-size: contain;
+  background-image: url("assets/hero-spritesheet-preview.png");
+  background-size: 300% 100%;
 }
 
 .loadout-grid .selected-card > strong {
@@ -1309,8 +1313,8 @@ p {
 .hero-preview {
   width: 132px;
   height: 132px;
-  background-image: url("assets/ui/lobby-exterminator-v2.png");
-  background-size: contain;
+  background-image: url("assets/hero-spritesheet-preview.png");
+  background-size: 300% 100%;
 }
 
 .skill-preview {
@@ -1522,7 +1526,7 @@ p {
   gap: 7px;
   padding: 0 8px 8px;
   background:
-    linear-gradient(180deg, #233f38, #171421 58%),
+    linear-gradient(180deg, #4d2330 0, #233f38 28%, #171421 72%),
     #171421;
 }
 
@@ -1569,10 +1573,10 @@ p {
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  border: 4px solid #fff0a2;
+  border: 4px solid #ffdf68;
   border-radius: var(--panel-radius);
   background: #3c6f4b;
-  box-shadow: 0 0 0 3px #3a2437, 0 8px 0 rgba(0, 0, 0, 0.34);
+  box-shadow: 0 0 0 3px #3a2437, 0 8px 0 rgba(0, 0, 0, 0.34), inset 0 0 0 3px rgba(239, 79, 69, 0.22);
 }
 
 canvas {

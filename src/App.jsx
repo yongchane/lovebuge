@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const isTestMode = window.location.pathname.endsWith("test.html");
 const initialGameUi = {
   level: 1,
-  toolName: "방역 장갑",
+  toolName: "손",
   score: "0",
   combo: 0,
   timeLeft: 60,
@@ -69,8 +69,8 @@ function TestPanel() {
 function Hud({ gameUi }) {
   const items = [
     ["남은 시간", "timeText", `${gameUi.timeLeft}s`],
-    ["박멸 점수", "scoreText", gameUi.score],
-    ["소탕 콤보", "comboText", `${gameUi.combo} COMBO`],
+    ["처치 점수", "scoreText", gameUi.score],
+    ["킬 콤보", "comboText", `${gameUi.combo} HIT`],
     ["현장", "venueText", gameUi.venueName],
   ];
 
@@ -92,21 +92,21 @@ function Stage() {
       <canvas id="gameCanvas" width="720" height="960" aria-label="러브버그 게임 화면" />
       <div id="startPanel" className="overlay-panel">
         <div className="pixel-badge">{isTestMode ? "TEST ZONE" : "출몰주의"}</div>
-        <h2>{isTestMode ? "도구 테스트" : "60초 버그 러시"}</h2>
+        <h2>{isTestMode ? "도구 테스트" : "60초 러브버그 슈팅"}</h2>
         <p>
           {isTestMode
             ? "레벨을 바꾸며 타격 범위와 스킬 상태를 확인하세요."
-            : "현장에 쏟아지는 러브버그를 터치로 시원하게 소탕하세요."}
+            : "조준점을 움직여 러브버그를 터치 사격으로 빠르게 처치하세요."}
         </p>
         <button id="startButton" className="primary-btn" type="button">
           {isTestMode ? "테스트 시작" : "방역 시작"}
         </button>
       </div>
       <div id="resultPanel" className="overlay-panel hidden">
-        <div className="pixel-badge">민원 해결</div>
-        <h2 id="resultTitle">클린업 완료!</h2>
+        <div className="pixel-badge">현장 제압</div>
+        <h2 id="resultTitle">러브버그 처치 완료!</h2>
         <p id="resultSummary" />
-        <button id="restartButton" className="primary-btn" type="button">다시 출동</button>
+        <button id="restartButton" className="primary-btn" type="button">다시 사격</button>
       </div>
     </section>
   );
@@ -115,9 +115,9 @@ function Stage() {
 function HeroShowcase({ gameUi }) {
   return (
     <div className="hero-showcase">
-      <img src="assets/ui/lobby-exterminator-v2.png" alt="" />
+      <img className="generated-hero-art" src="assets/generated/lovebug-hunter-squad.png" alt="" />
       <div className="hero-status">
-        <span>긴급 방역반</span>
+        <span>러브버그 헌터 스쿼드</span>
         <strong>Lv.{Math.max(1, gameUi.level)} · {gameUi.toolName}</strong>
       </div>
     </div>
@@ -132,22 +132,22 @@ function HomeScreen({ gameUi, setScreen }) {
         <span>긴급 신고 접수 · 러브버그 대량 출몰</span>
       </div>
       <div className="lobby-brief">
-        <span>방역 본부</span>
-        <h1>Lovebug Cleanup</h1>
-        <p>{gameUi.venueName} 현장에 60초 클린업 팀을 투입하세요.</p>
+        <span>헌터 본부</span>
+        <h1>Lovebug Shooter</h1>
+        <p>{gameUi.venueName} 현장에 홍길동·전우치·사무라이 팀을 투입하세요.</p>
       </div>
       <HeroShowcase gameUi={gameUi} />
       <div className="lobby-status-strip" aria-label="출동 상태">
         <button type="button" onClick={() => setScreen("map")}><b>{gameUi.venueName}</b><small>출몰 현장</small></button>
         <button type="button" onClick={() => setScreen("equipment")}><b>{gameUi.toolName}</b><small>장착 도구</small></button>
-        <button type="button" onClick={() => setScreen("crew")}><b>방역 동료</b><small>지원 대기</small></button>
+        <button type="button" onClick={() => setScreen("crew")}><b>헌터 동료</b><small>지원 사격</small></button>
       </div>
       <div className="mission-cta">
         <button className="side-cta map" type="button" onClick={() => setScreen("map")}><span>현장지도</span></button>
         <button className="ready-btn" type="button" onClick={() => setScreen("select")}>
           <small>BUG RUSH</small>
-          <strong>퇴치 준비</strong>
-          <span>브리핑 확인 후 현장 출동</span>
+          <strong>사격 준비</strong>
+          <span>브리핑 확인 후 러브버그 처치</span>
         </button>
         <button className="side-cta gear" type="button" onClick={() => setScreen("equipment")}><span>장비실</span></button>
       </div>
@@ -183,7 +183,7 @@ function ShopGrid({ gameUi }) {
         <button className={`shop-card ${selected ? "equipped" : ""}`} type="button" data-placeholder={index} key={hero.id}>
           <SpritePreview kind="hero" item={hero} compact />
           <span><b>{hero.name}</b><small>{hero.role} - {hero.desc}</small></span>
-          <strong>{selected ? "출전중" : "출전"}</strong>
+          <strong>{selected ? "사격중" : "출전"}</strong>
         </button>
       );
     });
@@ -261,21 +261,21 @@ function EquipmentScreen({ gameUi, setScreen }) {
   return (
     <section className="screen loadout-screen equipment-screen" aria-label="장비">
       <div className="screen-heading">
-        <span>출동 장비실</span>
-        <h1>방역 장비 점검</h1>
-        <p>터치 범위와 스킬 충전 상태를 확인합니다.</p>
+        <span>슈터 도구실</span>
+        <h1>도구와 스킬 점검</h1>
+        <p>사격 범위, 자동 조준, 스킬 충전 상태를 확인합니다.</p>
       </div>
       <div className="equipped-summary">
         <article className="selected-card selected-tool">
           <SpritePreview kind="tool" item={currentTool} />
           <span>장착 도구</span>
           <strong>{gameUi.toolName}</strong>
-          <small>타격 범위 {gameUi.range} · Lv.{currentTool?.level || gameUi.level}</small>
+          <small>사격 범위 {gameUi.range} · Lv.{currentTool?.level || gameUi.level}</small>
           <StatusTag>자동 장착</StatusTag>
         </article>
         <article className="selected-card selected-skill">
           <SpritePreview kind="skill" />
-          <span>장착 스킬</span>
+          <span>장착 슈팅 스킬</span>
           <strong>{equippedSkill?.name || gameUi.skillName}</strong>
           <small>{equippedSkill?.desc || gameUi.skillCharge}</small>
           <StatusTag>{equippedSkill ? "장착중" : "Lv.10 해금"}</StatusTag>
@@ -303,7 +303,7 @@ function EquipmentScreen({ gameUi, setScreen }) {
           })}
         </div>
       </section>
-      <button className="primary-btn" type="button" onClick={() => setScreen("shop")}>긴급 보급 받기</button>
+      <button className="primary-btn" type="button" onClick={() => setScreen("shop")}>도구 강화하기</button>
     </section>
   );
 }
@@ -314,16 +314,16 @@ function CrewScreen({ gameUi, setScreen }) {
   return (
     <section className="screen loadout-screen crew-screen" aria-label="동료">
       <div className="screen-heading">
-        <span>방역 동료</span>
-        <h1>현장 지원팀</h1>
-        <p>판타지 스킬은 방역 지원 연출로 정리해 투입합니다.</p>
+        <span>헌터 동료</span>
+        <h1>홍길동·전우치·사무라이</h1>
+        <p>이전 캐릭터 3인을 러브버그 처치 스쿼드로 다시 투입합니다.</p>
       </div>
       <article className="selected-card selected-hero">
         <SpritePreview kind="hero" item={selectedHero} />
         <span>선택 동료</span>
         <strong>{selectedHero?.name || "동료 없음"}</strong>
         <small>{selectedHero ? `${selectedHero.role} · ${selectedHero.desc}` : "보급 상점에서 지원 동료를 선택하세요."}</small>
-        <StatusTag>출전중</StatusTag>
+        <StatusTag>사격중</StatusTag>
       </article>
       <section className="inventory-panel" aria-label="동료 목록">
         <div className="shop-title">
@@ -346,7 +346,7 @@ function CrewScreen({ gameUi, setScreen }) {
           })}
         </div>
       </section>
-      <button className="primary-btn" type="button" onClick={() => setScreen("shop")}>지원팀 교체</button>
+      <button className="primary-btn" type="button" onClick={() => setScreen("shop")}>헌터 교체</button>
     </section>
   );
 }
@@ -359,7 +359,7 @@ function MapScreen({ gameUi, setScreen }) {
       <div className="screen-heading">
         <span>출몰 지도</span>
         <h1>현장 배치도</h1>
-        <p>하천, 산책로, 방충망 주변 신고 지점을 확인합니다.</p>
+        <p>러브버그가 몰리는 사격 라인과 출몰 지점을 확인합니다.</p>
       </div>
       <article className="venue-hero-card">
         <img src={selectedVenue?.image || "assets/maps/han-river-park.png"} alt="" />
@@ -391,7 +391,7 @@ function MapScreen({ gameUi, setScreen }) {
           })}
         </div>
       </section>
-      <button className="primary-btn" type="button" onClick={() => setScreen("shop")}>현장 후보 보기</button>
+      <button className="primary-btn" type="button" onClick={() => setScreen("shop")}>사격 현장 선택</button>
     </section>
   );
 }
@@ -400,9 +400,9 @@ function ShopScreen({ gameUi, setScreen }) {
   return (
     <section className="screen shop-screen" aria-label="상점">
       <div className="screen-heading">
-        <span>긴급 보급소</span>
-        <h1>장비와 지원 강화</h1>
-        <p>장비 효과, 스킬, 동료, 현장을 출동 세팅에 맞춰 정리합니다.</p>
+        <span>슈터 보급소</span>
+        <h1>도구와 헌터 강화</h1>
+        <p>도구 효과, 스킬, 헌터, 현장을 사격 세팅에 맞춰 정리합니다.</p>
       </div>
       <div className="dock-tabs" aria-label="상점 탭">
         <button className={`dock-tab ${gameUi.shopTab === "tool" ? "active" : ""}`} data-tab="tool" type="button">강화</button>
@@ -412,7 +412,7 @@ function ShopScreen({ gameUi, setScreen }) {
       </div>
       <section className="shop-panel shop-panel-main" aria-label="상점 목록">
         <div className="shop-title">
-          <span>{gameUi.shopTab === "tool" ? "장비 강화" : "출동 카드"}</span>
+          <span>{gameUi.shopTab === "tool" ? "도구 강화" : "출격 카드"}</span>
           <strong>{gameUi.coins}C 보유</strong>
         </div>
         <div id="skillShop" className="shop-grid">
@@ -420,10 +420,10 @@ function ShopScreen({ gameUi, setScreen }) {
         </div>
       </section>
       <div className="future-slots" aria-label="빠른 이동">
-        <button type="button">장비 강화</button>
-        <button type="button">지원 편성</button>
+        <button type="button">도구 강화</button>
+        <button type="button">헌터 편성</button>
       </div>
-      <button className="primary-btn" type="button" onClick={() => setScreen("select")}>출동 준비</button>
+      <button className="primary-btn" type="button" onClick={() => setScreen("select")}>사격 준비</button>
     </section>
   );
 }
@@ -441,9 +441,9 @@ function SelectScreen({ gameUi, setScreen }) {
   return (
     <section className="screen select-screen" aria-label="게임 선택">
       <div className="screen-heading">
-        <span>오늘의 출몰 현장 브리핑</span>
-        <h1>현장 투입 준비</h1>
-        <p>장소, 도구, 스킬, 동료를 확인하고 60초 방역 러시에 들어갑니다.</p>
+        <span>오늘의 러브버그 사격 브리핑</span>
+        <h1>현장 사격 준비</h1>
+        <p>장소, 도구, 스킬, 헌터를 확인하고 60초 러브버그 슈팅에 들어갑니다.</p>
       </div>
       <article
         className="briefing-card"
@@ -451,14 +451,14 @@ function SelectScreen({ gameUi, setScreen }) {
       >
         <span>신고 집중 지역</span>
         <strong>{selectedVenue?.name || gameUi.venueName}</strong>
-        <small>{selectedVenue?.meme || "러브버그 출몰 지역"} · 목표: 60초 동안 최대 소탕</small>
+        <small>{selectedVenue?.meme || "러브버그 출몰 지역"} · 목표: 60초 동안 최대 처치</small>
       </article>
       <div className="loadout-grid">
         <article className="selected-card">
           <SpritePreview kind="tool" item={currentTool} />
           <span>도구</span>
           <strong>{gameUi.toolName}</strong>
-          <small>타격 범위 {gameUi.range}</small>
+          <small>사격 범위 {gameUi.range}</small>
         </article>
         <article className="selected-card">
           <SpritePreview kind="skill" />
@@ -468,9 +468,9 @@ function SelectScreen({ gameUi, setScreen }) {
         </article>
         <article className="selected-card">
           <SpritePreview kind="hero" item={selectedHero} />
-          <span>동료</span>
+          <span>헌터</span>
           <strong>{selectedHero?.name || "홍길동"}</strong>
-          <small>{selectedHero?.role || "방역 지원"}</small>
+          <small>{selectedHero?.role || "지원 사격"}</small>
         </article>
         <article
           className="selected-card venue-tile"
@@ -482,8 +482,8 @@ function SelectScreen({ gameUi, setScreen }) {
         </article>
       </div>
       <div className="select-actions">
-        <button className="secondary-btn" type="button" onClick={() => setScreen("shop")}>장비 교체</button>
-        <button className="primary-btn" type="button" onClick={startRun}>출동!</button>
+        <button className="secondary-btn" type="button" onClick={() => setScreen("shop")}>도구 교체</button>
+        <button className="primary-btn" type="button" onClick={startRun}>사격 시작!</button>
       </div>
     </section>
   );
@@ -497,7 +497,7 @@ function PlayScreen({ gameUi }) {
       <section className="battle-dock">
         <div>
           <div className="meter-label">
-            <span>장비 성장</span>
+            <span>도구 성장</span>
             <strong id="expText">{gameUi.expText}</strong>
           </div>
           <div className="meter"><span id="expBar" style={{ width: `${gameUi.expPercent}%` }} /></div>
